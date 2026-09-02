@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TGE SC. — the arsenal</title>
+<meta name="description" content="Local-first security tools. Six products. Zero telemetry. Built by a U.S. Navy veteran. Pay once, no account, nothing phones home.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0D1210;
+    --bg-raised:#141B18;
+    --line:#26302B;
+    --fg:#E8E6DE;
+    --fg-dim:#8A9188;
+    --signal:#5FA88C;
+    --signal-dim:#3E7261;
+    --warn:#C97A4A;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:'Source Sans 3', system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{ font-family:'JetBrains Mono', ui-monospace, monospace; }
+  a{ color:var(--signal); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--signal); outline-offset:2px; }
+
+  .wrap{ max-width:760px; margin:0 auto; padding:0 24px; }
+
+  header.top{
+    border-bottom:1px solid var(--line);
+    padding:56px 0 40px;
+  }
+  .prompt{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--signal-dim);
+    font-size:13px;
+    margin-bottom:18px;
+    letter-spacing:0.02em;
+  }
+  h1{
+    font-family:'JetBrains Mono', monospace;
+    font-size:clamp(28px, 5vw, 42px);
+    line-height:1.15;
+    margin:0 0 14px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  h1 .dim{ color:var(--fg-dim); font-weight:500; }
+  .tagline{
+    color:var(--fg-dim);
+    font-size:16px;
+    max-width:52ch;
+    margin:0 0 22px;
+  }
+  .byline{
+    font-size:14px;
+    color:var(--fg-dim);
+  }
+  .byline strong{ color:var(--fg); font-weight:600; }
+  .byline a{ color:var(--fg-dim); text-decoration:underline; text-decoration-color:var(--line); }
+  .byline a:hover{ color:var(--signal); text-decoration-color:var(--signal); }
+
+  section{ padding:44px 0; border-bottom:1px solid var(--line); }
+  section:last-of-type{ border-bottom:none; }
+
+  .section-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--fg-dim);
+    margin-bottom:20px;
+  }
+
+  .product{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:6px 20px;
+    padding:22px 0;
+    border-bottom:1px solid var(--line);
+    align-items:start;
+  }
+  .product:first-of-type{ padding-top:0; }
+  .product:last-of-type{ border-bottom:none; padding-bottom:0; }
+
+  .product-name{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:600;
+    font-size:17px;
+    color:var(--fg);
+    grid-column:1;
+  }
+  .product-desc{
+    color:var(--fg-dim);
+    font-size:14.5px;
+    grid-column:1 / -1;
+    max-width:58ch;
+    margin-top:2px;
+  }
+  .product-price{
+    font-family:'JetBrains Mono', monospace;
+    font-size:14px;
+    color:var(--fg-dim);
+    grid-column:2;
+    text-align:right;
+    white-space:nowrap;
+    padding-top:2px;
+  }
+  .product-buy{
+    grid-column:1 / -1;
+    margin-top:10px;
+  }
+  .buy-btn{
+    display:inline-block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    font-weight:600;
+    color:var(--bg);
+    background:var(--signal);
+    padding:8px 16px;
+    border-radius:3px;
+    transition:background 0.15s ease;
+  }
+  .buy-btn:hover{
+    background:#74BFA1;
+    text-decoration:none;
+  }
+  .buy-btn.subscribe{
+    background:transparent;
+    color:var(--signal);
+    border:1px solid var(--signal-dim);
+  }
+  .buy-btn.subscribe:hover{
+    background:var(--signal-dim);
+    color:var(--fg);
+  }
+
+  ol.orders{
+    margin:0;
+    padding-left:22px;
+    color:var(--fg-dim);
+  }
+  ol.orders li{ margin-bottom:10px; }
+  ol.orders li::marker{
+    font-family:'JetBrains Mono', monospace;
+    color:var(--signal-dim);
+  }
+  ol.orders strong{ color:var(--fg); font-weight:600; }
+
+  .footer-meta{
+    color:var(--fg-dim);
+    font-size:14px;
+  }
+  .footer-meta p{ margin:0 0 10px; }
+  .footer-meta a{ color:var(--fg-dim); text-decoration:underline; text-decoration-color:var(--line); }
+  .footer-meta a:hover{ color:var(--signal); text-decoration-color:var(--signal); }
+
+  footer.bottom{
+    padding:32px 0 56px;
+    color:var(--fg-dim);
+    font-size:13px;
+    font-family:'JetBrains Mono', monospace;
+  }
+
+  @media (max-width:480px){
+    .product{ grid-template-columns:1fr; }
+    .product-price{ grid-column:1; text-align:left; margin-top:2px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="prompt">$ cat catalog</div>
+    <h1>TGE SC. <span class="dim">— the arsenal</span></h1>
+    <p class="tagline">Local-first security tools. Six products. Zero telemetry. Nothing phones home.</p>
+    <p class="byline">Built by <strong>R.D. Hodges</strong>, U.S. Navy veteran &middot; TGE Collective LLC &middot; Support: <a href="mailto:tgerd101010@gmail.com">tgerd101010@gmail.com</a></p>
+  </header>
+
+  <section id="catalog">
+    <div class="section-label">// products — pay once, zip emailed after checkout, no account needed</div>
+
+    <div class="product">
+      <div class="product-name">SecretDex</div>
+      <div class="product-price">$29 once</div>
+      <div class="product-desc">Offline credential scanner. 20 detectors + Shannon entropy + placeholder filtering. Outputs HTML + JSON. CI-ready with <span class="mono">--fail-on HIGH</span>.</div>
+      <div class="product-buy"><a class="buy-btn" href="https://buy.stripe.com/00w3cv2M9cSSgDcctGf7i05">Buy</a></div>
+    </div>
+
+    <div class="product">
+      <div class="product-name">ThreatDex</div>
+      <div class="product-price">$23 once</div>
+      <div class="product-desc">Offline Android APK permission risk score. Plain-English report of what an app can actually touch.</div>
+      <div class="product-buy"><a class="buy-btn" href="https://buy.stripe.com/4gM14n5Yl7yyfz865if7i04">Buy</a></div>
+    </div>
+
+    <div class="product">
+      <div class="product-name">Rigsmith</div>
+      <div class="product-price">$24 once</div>
+      <div class="product-desc">Describe the environment, get a validated multi-stack build plan: dependencies, configs, order. Runs in browser, no install.</div>
+      <div class="product-buy"><a class="buy-btn" href="https://buy.stripe.com/14A9ATgCZcSS9aK79mf7i03">Buy</a></div>
+    </div>
+
+    <div class="product">
+      <div class="product-name">Moto Flash &amp; Root Companion</div>
+      <div class="product-price">$34 once</div>
+      <div class="product-desc">Guided Motorola bootloader unlock / root, scoped to official OEM channels. Desktop app plus portable USB kit.</div>
+      <div class="product-buy"><a class="buy-btn" href="https://buy.stripe.com/cNicN572pdWWev49huf7i02">Buy</a></div>
+    </div>
+
+    <div class="product">
+      <div class="product-name">TGE Ops Agent</div>
+      <div class="product-price">$34 / month</div>
+      <div class="product-desc">Termux voice + text command agent. Every command is risk-classified before it runs. The one subscription in the lineup — cloud-assisted by necessity.</div>
+      <div class="product-buy"><a class="buy-btn subscribe" href="https://buy.stripe.com/8x228r3Qdg54biSbpCf7i01">Subscribe</a></div>
+    </div>
+
+    <div class="product">
+      <div class="product-name">Faceless Content Prompt Vault</div>
+      <div class="product-price">$15 once</div>
+      <div class="product-desc">Curated prompt library for faceless creators. PDF, organized, not a blank page.</div>
+      <div class="product-buy"><a class="buy-btn" href="https://buy.stripe.com/28E00j0E15qqbiS0KYf7i00">Buy</a></div>
+    </div>
+  </section>
+
+  <section id="orders">
+    <div class="section-label">// standing orders</div>
+    <ol class="orders">
+      <li><strong>Offline-first.</strong> If it needs the cloud to function, it does not ship — Ops Agent is the one exception, and it's priced as a subscription because of that.</li>
+      <li><strong>No telemetry.</strong> Nothing calls home.</li>
+      <li><strong>No subscriptions on the one-time tools.</strong> No feature paywalls after the fact.</li>
+      <li><strong>Built to be read.</strong></li>
+    </ol>
+  </section>
+
+  <section id="fulfillment">
+    <div class="section-label">// source &amp; fulfillment</div>
+    <div class="footer-meta">
+      <p>SecretDex write-up and usage: <a href="https://github.com/skip606/TGESC-SECRETDEX">github.com/skip606/TGESC-SECRETDEX</a></p>
+      <p>Purchases are fulfilled by email from <a href="mailto:tgerd101010@gmail.com">tgerd101010@gmail.com</a>. Single-operator license: use on machines you control, do not redistribute the product files.</p>
+      <p>Need something custom, or not sure which product fits? <a href="intake.html">Tell me about your project →</a></p>
+    </div>
+  </section>
+
+  <footer class="bottom">
+    TGE Collective LLC &middot; <a href="https://github.com/skip606/TGE-SC">github.com/skip606/TGE-SC</a>
+  </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TGE SC. — Project Intake</title>
+<style>
+  :root {
+    --navy: #0F1830;
+    --navy-card: #17223F;
+    --navy-field: #1C2847;
+    --gold: #C9974D;
+    --gold-dim: rgba(201,151,77,0.35);
+    --cream: #F4EFE6;
+    --muted: #8B93AC;
+    --border: rgba(201,151,77,0.18);
+    --good: #6FBF8F;
+    --error: #D9705C;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--navy);
+    background-image:
+      linear-gradient(rgba(201,151,77,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,151,77,0.035) 1px, transparent 1px);
+    background-size: 36px 36px;
+    color: var(--cream);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif;
+    line-height: 1.5;
+  }
+  .mono { font-family: 'DejaVu Sans Mono', 'JetBrains Mono', monospace; }
+
+  .wrap { max-width: 640px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  header { text-align: center; margin-bottom: 36px; }
+  .kicker {
+    color: var(--gold);
+    font-size: 12.5px;
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 30px;
+    margin: 0 0 10px;
+    letter-spacing: 0.2px;
+  }
+  .sub {
+    color: var(--muted);
+    font-size: 15.5px;
+    max-width: 460px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: var(--navy-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 26px 24px;
+    margin-bottom: 20px;
+  }
+  .card h2 {
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    color: var(--gold);
+    margin: 0 0 4px;
+    text-transform: uppercase;
+  }
+  .card .card-note {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0 0 20px;
+  }
+
+  label.field {
+    display: block;
+    margin-bottom: 18px;
+  }
+  label.field:last-child { margin-bottom: 0; }
+  .field-label {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .field-help {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 9px;
+  }
+
+  input[type=text], input[type=email], input[type=tel], textarea, select {
+    width: 100%;
+    background: var(--navy-field);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 12px 13px;
+    color: var(--cream);
+    font-size: 15.5px;
+    font-family: inherit;
+  }
+  textarea { resize: vertical; min-height: 76px; }
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  input::placeholder, textarea::placeholder { color: #5C6584; }
+
+  /* choice chips */
+  .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+  .choice {
+    position: relative;
+  }
+  .choice input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .choice span {
+    display: block;
+    padding: 10px 15px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--navy-field);
+    font-size: 14.5px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .choice input:checked + span {
+    border-color: var(--gold);
+    background: rgba(201,151,77,0.12);
+    color: var(--gold);
+  }
+  .choices.stack { flex-direction: column; }
+  .choices.stack .choice span { width: 100%; }
+
+  /* service picker - larger cards */
+  .service-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .svc { position: relative; }
+  .svc input { position: absolute; opacity: 0; }
+  .svc span {
+    display: block;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--navy-field);
+    cursor: pointer;
+  }
+  .svc .svc-name { font-weight: 700; font-size: 15.5px; display: block; margin-bottom: 2px; }
+  .svc .svc-desc { font-size: 13px; color: var(--muted); }
+  .svc input:checked + span {
+    border-color: var(--gold);
+    background: rgba(201,151,77,0.10);
+  }
+  .svc input:checked + span .svc-name { color: var(--gold); }
+
+  .req { color: var(--gold); }
+
+  .submit-row { margin-top: 8px; }
+  button.submit {
+    width: 100%;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  button.submit:active { transform: scale(0.99); }
+  button.submit:disabled { opacity: 0.6; cursor: default; }
+  .fine {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12.5px;
+    margin-top: 14px;
+  }
+  .error-msg {
+    display: none;
+    background: rgba(217,112,92,0.12);
+    border: 1px solid rgba(217,112,92,0.4);
+    color: var(--error);
+    border-radius: 7px;
+    padding: 12px 14px;
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+  .error-msg.show { display: block; }
+
+  footer {
+    text-align: center;
+    margin-top: 36px;
+    color: var(--muted);
+    font-size: 11.5px;
+    letter-spacing: 2px;
+  }
+
+  .confirm {
+    display: none;
+    text-align: center;
+    padding: 50px 20px;
+  }
+  .confirm.show { display: block; }
+  .confirm .mark {
+    width: 56px; height: 56px;
+    border: 2px solid var(--good);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    color: var(--good);
+    font-size: 26px;
+  }
+  .confirm h2 { font-size: 22px; margin-bottom: 8px; }
+  .confirm p { color: var(--muted); max-width: 380px; margin: 0 auto; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="formView">
+    <header>
+      <div class="kicker mono">TGE SC. // WHERE SECURITY MEETS INNOVATION</div>
+      <h1>Tell me about your project</h1>
+      <p class="sub">Answer what applies to you — this takes about 3 minutes and helps me put together an accurate quote and timeline before we talk.</p>
+    </header>
+
+    <!--
+      FORMSPREE SETUP (one-time):
+      1. Go to https://formspree.io and sign up free.
+      2. Create a new form. Formspree gives you an endpoint like:
+         https://formspree.io/f/xxxxxxxx
+      3. Replace YOUR_FORM_ID below (in the action attribute) with that ID.
+      4. Submit the form once for real — Formspree sends a confirmation
+         email the first time, and you must click it to activate the form.
+      Free plan = 50 submissions/month, no credit card required.
+    -->
+    <form id="intakeForm" action="https://frmsp.io/f/uZzWrBSp2QOP" method="POST">
+      <!-- Optional: redirect target Formspree uses if JS fails / is disabled -->
+      <input type="hidden" name="_subject" value="New TGE SC. project intake">
+
+      <!-- Honeypot spam trap (Formspree ignores submissions where this is filled) -->
+      <p style="position:absolute; left:-9999px;">
+        <label>Don't fill this out if you're human: <input name="_gotcha"></label>
+      </p>
+
+      <div class="error-msg" id="errorMsg">
+        Something went wrong sending your details. Please try again, or email
+        <a href="mailto:tgerd101010@gmail.com" style="color:inherit;">tgerd101010@gmail.com</a> directly.
+      </div>
+
+      <!-- CONTACT -->
+      <div class="card">
+        <h2>Your info</h2>
+        <p class="card-note">So I know who I'm talking to and how to reach you.</p>
+
+        <label class="field">
+          <span class="field-label">Full name <span class="req">*</span></span>
+          <input type="text" name="name" required placeholder="Jane Smith">
+        </label>
+
+        <label class="field">
+          <span class="field-label">Email <span class="req">*</span></span>
+          <input type="email" name="email" required placeholder="jane@company.com">
+        </label>
+
+        <label class="field">
+          <span class="field-label">Phone</span>
+          <span class="field-help">Optional — only if you'd rather talk than email.</span>
+          <input type="tel" name="phone" placeholder="(555) 555-5555">
+        </label>
+
+        <label class="field">
+          <span class="field-label">Company or household name</span>
+          <span class="field-help">If this is for a business, family office, or organization.</span>
+          <input type="text" name="company" placeholder="e.g. Smith Family Office">
+        </label>
+      </div>
+
+      <!-- SERVICE TYPE -->
+      <div class="card">
+        <h2>What do you need help with?</h2>
+        <p class="card-note">Pick the one that's closest — don't worry about getting it exactly right.</p>
+
+        <div class="service-grid" id="serviceGrid">
+          <label class="svc">
+            <input type="radio" name="service" value="assessment" required>
+            <span>
+              <span class="svc-name">Security check-up / assessment</span>
+              <span class="svc-desc">"Am I exposed?" — a review of your systems with a report on what's risky and what to fix.</span>
+            </span>
+          </label>
+          <label class="svc">
+            <input type="radio" name="service" value="incident">
+            <span>
+              <span class="svc-name">Something already happened</span>
+              <span class="svc-desc">A breach, leak, hack, or suspicious activity you need help responding to.</span>
+            </span>
+          </label>
+          <label class="svc">
+            <input type="radio" name="service" value="secrets">
+            <span>
+              <span class="svc-name">Leaked passwords / credentials scan</span>
+              <span class="svc-desc">Find exposed passwords, API keys, or login info sitting in files or code.</span>
+            </span>
+          </label>
+          <label class="svc">
+            <input type="radio" name="service" value="mobile">
+            <span>
+              <span class="svc-name">Phone / device security</span>
+              <span class="svc-desc">Android app risk checks, device setup, or mobile security review.</span>
+            </span>
+          </label>
+          <label class="svc">
+            <input type="radio" name="service" value="devtools">
+            <span>
+              <span class="svc-name">Developer tools / environment setup</span>
+              <span class="svc-desc">Setting up a coding environment, automation, or a custom internal tool.</span>
+            </span>
+          </label>
+          <label class="svc">
+            <input type="radio" name="service" value="ongoing">
+            <span>
+              <span class="svc-name">Ongoing monitoring / retainer</span>
+              <span class="svc-desc">Not a one-time job — you want someone watching things continuously.</span>
+            </span>
+          </label>
+          <label class="svc">
+            <input type="radio" name="service" value="other">
+            <span>
+              <span class="svc-name">Something else / not sure</span>
+              <span class="svc-desc">Describe it below and I'll figure out the right fit.</span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <!-- PROJECT DETAILS (always shown) -->
+      <div class="card">
+        <h2>Project details</h2>
+
+        <label class="field">
+          <span class="field-label">In your own words, what's going on or what do you need? <span class="req">*</span></span>
+          <span class="field-help">No need for technical terms — plain language is perfect.</span>
+          <textarea name="description" required placeholder="e.g. We think someone may have gotten into one of our email accounts, or: We just want peace of mind that our systems are secure."></textarea>
+        </label>
+
+        <label class="field">
+          <span class="field-label">How many computers, phones, or accounts are involved? <span class="req">*</span></span>
+          <span class="field-help">A rough number is fine — doesn't need to be exact.</span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="scale" value="1-3" required><span>1–3</span></label>
+            <label class="choice"><input type="radio" name="scale" value="4-10"><span>4–10</span></label>
+            <label class="choice"><input type="radio" name="scale" value="11-25"><span>11–25</span></label>
+            <label class="choice"><input type="radio" name="scale" value="25+"><span>25+</span></label>
+            <label class="choice"><input type="radio" name="scale" value="unsure"><span>Not sure</span></label>
+          </div>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Has anything already happened, or is this preventative? <span class="req">*</span></span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="trigger" value="incident" required><span>Something happened</span></label>
+            <label class="choice"><input type="radio" name="trigger" value="proactive"><span>Being proactive</span></label>
+            <label class="choice"><input type="radio" name="trigger" value="requirement"><span>Compliance / requirement</span></label>
+          </div>
+        </label>
+
+        <label class="field">
+          <span class="field-label">How would you like this handled? <span class="req">*</span></span>
+          <div class="choices stack">
+            <label class="choice"><input type="radio" name="depth" value="assess" required><span>Just tell me what's wrong — I'll decide what to fix</span></label>
+            <label class="choice"><input type="radio" name="depth" value="fix"><span>Find it and fix it for me</span></label>
+            <label class="choice"><input type="radio" name="depth" value="watch"><span>Set it up so it's continuously monitored going forward</span></label>
+          </div>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Does this need to happen remotely, or on-site? <span class="req">*</span></span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="location" value="remote" required><span>Remote is fine</span></label>
+            <label class="choice"><input type="radio" name="location" value="onsite"><span>Needs on-site</span></label>
+            <label class="choice"><input type="radio" name="location" value="either"><span>Either works</span></label>
+          </div>
+        </label>
+
+        <label class="field">
+          <span class="field-label">When do you need this done? <span class="req">*</span></span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="timeline" value="asap" required><span>ASAP / urgent</span></label>
+            <label class="choice"><input type="radio" name="timeline" value="week"><span>This week</span></label>
+            <label class="choice"><input type="radio" name="timeline" value="month"><span>Within a month</span></label>
+            <label class="choice"><input type="radio" name="timeline" value="flexible"><span>Flexible / just exploring</span></label>
+          </div>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Anything else I should know?</span>
+          <span class="field-help">Budget range, past incidents, tools already in place, privacy concerns — anything at all.</span>
+          <textarea name="notes" placeholder="Optional"></textarea>
+        </label>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" class="submit" id="submitBtn">Send project details</button>
+        <p class="fine">I typically reply within one business day. Everything you share here is handled privately and never stored on third-party servers.</p>
+      </div>
+
+    </form>
+
+    <footer class="mono">BUILT BY R.D. HODGES · NAVY VETERAN · SELF-TAUGHT IN CYBERSECURITY</footer>
+  </div>
+
+  <div class="confirm" id="confirmView">
+    <div class="mark">✓</div>
+    <h2>Got it, thank you.</h2>
+    <p>Your project details are in. I'll review everything and follow up by email within one business day with next steps and a quote.</p>
+  </div>
+
+</div>
+
+<script>
+  const form = document.getElementById('intakeForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const errorMsg = document.getElementById('errorMsg');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    errorMsg.classList.remove('show');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    })
+      .then((response) => {
+        if (response.ok) {
+          document.getElementById('formView').style.display = 'none';
+          document.getElementById('confirmView').classList.add('show');
+          window.scrollTo(0, 0);
+        } else {
+          throw new Error('Form submission failed');
+        }
+      })
+      .catch(() => {
+        errorMsg.classList.add('show');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send project details';
+        window.scrollTo(0, 0);
+      });
+  });
+</script>
+
+</body>
+</html>
